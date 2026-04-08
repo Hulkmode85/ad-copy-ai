@@ -1,0 +1,13 @@
+{
+  "name": "adblitz-ai",
+  "version": "1.0.0",
+  "description": "AI Ad Copy Generator",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "@anthropic-ai/sdk": "^0.39.0"
+  }
+}
