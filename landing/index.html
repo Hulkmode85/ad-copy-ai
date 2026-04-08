@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AdBlitz AI - High-Converting Ad Copy in Seconds</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #1a1a2e; }
+        .gradient-bg { background: linear-gradient(135deg, #0f0c29, #302b63, #24243e); }
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+
+        nav { padding: 20px 0; display: flex; justify-content: space-between; align-items: center; }
+        nav .logo { font-size: 1.5rem; font-weight: 800; color: #fff; }
+        nav .logo span { color: #00d4ff; }
+        nav a.cta-btn { background: #00d4ff; color: #0f0c29; padding: 10px 24px; border-radius: 30px; text-decoration: none; font-weight: 700; transition: transform .2s; }
+        nav a.cta-btn:hover { transform: scale(1.05); }
+
+        .hero { padding: 80px 0 100px; text-align: center; color: #fff; }
+        .hero h1 { font-size: 3.2rem; font-weight: 900; line-height: 1.1; margin-bottom: 20px; }
+        .hero h1 span { background: linear-gradient(90deg, #00d4ff, #7b2ff7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero p { font-size: 1.25rem; max-width: 620px; margin: 0 auto 40px; opacity: .85; }
+        .hero-cta { display: inline-block; background: linear-gradient(90deg, #00d4ff, #7b2ff7); color: #fff; padding: 16px 40px; border-radius: 30px; font-size: 1.1rem; font-weight: 700; text-decoration: none; transition: transform .2s, box-shadow .2s; }
+        .hero-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,212,255,.3); }
+        .badge { display: inline-block; background: rgba(0,212,255,.15); color: #00d4ff; padding: 6px 16px; border-radius: 20px; font-size: .85rem; margin-bottom: 20px; border: 1px solid rgba(0,212,255,.3); }
+
+        .stats { display: flex; justify-content: center; gap: 60px; margin-top: 50px; }
+        .stat { text-align: center; color: #fff; }
+        .stat .num { font-size: 2.5rem; font-weight: 900; background: linear-gradient(90deg, #00d4ff, #7b2ff7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .stat .label { font-size: .9rem; opacity: .7; }
+
+        .how { padding: 80px 0; background: #f8f9ff; }
+        .section-title { text-align: center; font-size: 2.2rem; font-weight: 800; margin-bottom: 50px; }
+        .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 25px; }
+        .step { text-align: center; padding: 25px 20px; background: #fff; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,.06); }
+        .step .num { display: inline-flex; width: 40px; height: 40px; align-items: center; justify-content: center; background: linear-gradient(135deg, #00d4ff, #7b2ff7); color: #fff; border-radius: 50%; font-weight: 800; margin-bottom: 12px; }
+        .step h3 { font-size: 1.05rem; margin-bottom: 8px; }
+        .step p { color: #666; font-size: .9rem; }
+
+        .platforms { padding: 60px 0; text-align: center; }
+        .platform-grid { display: flex; justify-content: center; gap: 30px; margin-top: 30px; flex-wrap: wrap; }
+        .plat { padding: 20px 30px; background: #f8f9ff; border-radius: 12px; font-weight: 700; font-size: 1.1rem; }
+
+        .features { padding: 80px 0; background: #f8f9ff; }
+        .feature-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; }
+        .feat { padding: 30px; background: #fff; border-radius: 16px; box-shadow: 0 2px 12px rgba(0,0,0,.05); }
+        .feat .icon { font-size: 2rem; margin-bottom: 12px; }
+        .feat h3 { margin-bottom: 8px; }
+        .feat p { color: #666; font-size: .9rem; }
+
+        .pricing { padding: 80px 0; }
+        .plans { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; max-width: 950px; margin: 0 auto; }
+        .plan { padding: 35px 30px; border-radius: 16px; border: 2px solid #e8e8f0; text-align: center; position: relative; transition: transform .2s; }
+        .plan:hover { transform: translateY(-4px); }
+        .plan.featured { border-color: #7b2ff7; background: linear-gradient(180deg, #f5f0ff 0%, #fff 100%); }
+        .plan .popular { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: linear-gradient(90deg, #00d4ff, #7b2ff7); color: #fff; padding: 4px 16px; border-radius: 20px; font-size: .75rem; font-weight: 700; }
+        .plan h3 { font-size: 1.2rem; margin-bottom: 10px; }
+        .plan .price { font-size: 2.8rem; font-weight: 900; color: #302b63; }
+        .plan .price span { font-size: .9rem; color: #999; font-weight: 400; }
+        .plan .desc { color: #666; font-size: .9rem; margin: 10px 0 20px; }
+        .plan ul { list-style: none; text-align: left; margin-bottom: 25px; }
+        .plan ul li { padding: 6px 0; font-size: .9rem; }
+        .plan ul li::before { content: "\2713"; color: #7b2ff7; font-weight: 700; margin-right: 8px; }
+        .plan-btn { display: block; padding: 12px; border-radius: 30px; text-decoration: none; font-weight: 700; font-size: .95rem; transition: transform .2s; }
+        .plan-btn.primary { background: linear-gradient(90deg, #00d4ff, #7b2ff7); color: #fff; }
+        .plan-btn.secondary { background: #f5f0ff; color: #7b2ff7; }
+
+        .final-cta { padding: 80px 0; text-align: center; background: #f8f9ff; }
+        .final-cta h2 { font-size: 2.2rem; font-weight: 800; margin-bottom: 15px; }
+        .final-cta p { color: #666; margin-bottom: 30px; font-size: 1.1rem; }
+
+        footer { padding: 30px 0; text-align: center; color: #999; font-size: .85rem; border-top: 1px solid #eee; }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; }
+            .steps, .feature-grid, .plans { grid-template-columns: 1fr; }
+            .stats { flex-direction: column; gap: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="gradient-bg">
+    <div class="container">
+        <nav>
+            <div class="logo">Ad<span>Blitz</span> AI</div>
+            <a href="#pricing" class="cta-btn">Start Free Trial</a>
+        </nav>
+        <section class="hero">
+            <div class="badge">Used by 5,000+ marketers</div>
+            <h1>High-Converting <span>Ad Copy</span><br>in Seconds</h1>
+            <p>Enter your product, audience, and platform. Get 5 ad variations with headlines, descriptions, and CTAs instantly. Built for Facebook, Google, Instagram, and TikTok.</p>
+            <a href="#pricing" class="hero-cta">Generate Ad Copy Free</a>
+            <div class="stats">
+                <div class="stat"><div class="num">2.4x</div><div class="label">Higher CTR on average</div></div>
+                <div class="stat"><div class="num">5 ads</div><div class="label">Generated per request</div></div>
+                <div class="stat"><div class="num">< 10s</div><div class="label">Generation time</div></div>
+            </div>
+        </section>
+    </div>
+</div>
+
+<section class="how">
+    <div class="container">
+        <h2 class="section-title">How It Works</h2>
+        <div class="steps">
+            <div class="step"><div class="num">1</div><h3>Describe Product</h3><p>Enter your product name, features, and unique selling points.</p></div>
+            <div class="step"><div class="num">2</div><h3>Define Audience</h3><p>Specify your target demographic, interests, and pain points.</p></div>
+            <div class="step"><div class="num">3</div><h3>Pick Platform</h3><p>Choose Facebook, Google, Instagram, TikTok, or all platforms.</p></div>
+            <div class="step"><div class="num">4</div><h3>Get 5 Variations</h3><p>Receive 5 unique ad copies with A/B test suggestions.</p></div>
+        </div>
+    </div>
+</section>
+
+<section class="platforms">
+    <div class="container">
+        <h2 class="section-title">Every Major Ad Platform</h2>
+        <div class="platform-grid">
+            <div class="plat" style="color:#1877f2;">Facebook</div>
+            <div class="plat" style="color:#4285f4;">Google Ads</div>
+            <div class="plat" style="color:#e4405f;">Instagram</div>
+            <div class="plat" style="color:#000;">TikTok</div>
+        </div>
+    </div>
+</section>
+
+<section class="features">
+    <div class="container">
+        <h2 class="section-title">Powerful Features</h2>
+        <div class="feature-grid">
+            <div class="feat"><div class="icon">&#9889;</div><h3>5 Variations Instantly</h3><p>Get 5 unique ad copies with different angles, hooks, and CTAs for each request.</p></div>
+            <div class="feat"><div class="icon">&#127919;</div><h3>Platform-Optimized</h3><p>Each ad follows platform-specific best practices for character limits and format.</p></div>
+            <div class="feat"><div class="icon">&#128200;</div><h3>A/B Test Suggestions</h3><p>Get recommendations on which variations to test against each other and why.</p></div>
+            <div class="feat"><div class="icon">&#128172;</div><h3>Multiple Tones</h3><p>Professional, casual, urgent, humorous -- match your brand voice perfectly.</p></div>
+            <div class="feat"><div class="icon">&#128176;</div><h3>CTA Optimization</h3><p>Each variation includes a data-driven call-to-action proven to convert.</p></div>
+            <div class="feat"><div class="icon">&#128640;</div><h3>Bulk Generation</h3><p>Agency plan lets you generate ads for multiple products and campaigns at scale.</p></div>
+        </div>
+    </div>
+</section>
+
+<section class="pricing" id="pricing">
+    <div class="container">
+        <h2 class="section-title">Plans That Scale With You</h2>
+        <div class="plans">
+            <div class="plan">
+                <h3>Starter</h3>
+                <div class="price">$29<span>/mo</span></div>
+                <div class="desc">For solo marketers & small businesses</div>
+                <ul>
+                    <li>50 ad generations/month</li>
+                    <li>All 4 platforms</li>
+                    <li>5 variations per generation</li>
+                    <li>A/B test suggestions</li>
+                    <li>Export to clipboard</li>
+                </ul>
+                <a href="APP_URL" class="plan-btn secondary">Start Free Trial</a>
+            </div>
+            <div class="plan featured">
+                <div class="popular">MOST POPULAR</div>
+                <h3>Pro</h3>
+                <div class="price">$49<span>/mo</span></div>
+                <div class="desc">For growing teams & agencies</div>
+                <ul>
+                    <li>200 ad generations/month</li>
+                    <li>All 4 platforms</li>
+                    <li>5 variations per generation</li>
+                    <li>A/B test suggestions</li>
+                    <li>Tone customization</li>
+                    <li>Campaign history</li>
+                    <li>Priority support</li>
+                </ul>
+                <a href="APP_URL" class="plan-btn primary">Start Free Trial</a>
+            </div>
+            <div class="plan">
+                <h3>Agency</h3>
+                <div class="price">$99<span>/mo</span></div>
+                <div class="desc">For agencies managing multiple clients</div>
+                <ul>
+                    <li>Unlimited generations</li>
+                    <li>All 4 platforms</li>
+                    <li>Bulk generation</li>
+                    <li>Team collaboration</li>
+                    <li>API access</li>
+                    <li>White-label exports</li>
+                    <li>Dedicated support</li>
+                </ul>
+                <a href="APP_URL" class="plan-btn secondary">Contact Sales</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="final-cta">
+    <div class="container">
+        <h2>Stop Guessing. Start Converting.</h2>
+        <p>Join thousands of marketers generating high-performing ad copy with AI.</p>
+        <a href="#pricing" class="hero-cta" style="background:linear-gradient(90deg,#00d4ff,#7b2ff7);color:#fff;">Generate Your First Ad Free</a>
+    </div>
+</section>
+
+<footer>
+    <div class="container">
+        <p>&copy; 2026 AdBlitz AI. All rights reserved.</p>
+    </div>
+</footer>
+
+</body>
+</html>
