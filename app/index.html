@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AdBlitz AI - Generate High-Converting Ad Copy</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0f0c29; min-height: 100vh; color: #e0e0e0; }
+        .header { background: linear-gradient(135deg, #0f0c29, #302b63); padding: 20px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,.1); }
+        .header h1 { font-size: 1.4rem; font-weight: 800; color: #fff; }
+        .header span { color: #00d4ff; }
+        .main { max-width: 950px; margin: 30px auto; padding: 0 20px; }
+        .card { background: rgba(255,255,255,.05); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,.1); border-radius: 16px; padding: 30px; margin-bottom: 25px; }
+        .card h2 { font-size: 1.3rem; margin-bottom: 20px; color: #fff; }
+        label { display: block; font-weight: 600; margin-bottom: 6px; font-size: .9rem; color: #ccc; }
+        .hint { font-size: .8rem; color: #888; margin-bottom: 10px; }
+        textarea, input[type="text"], select { width: 100%; padding: 12px; border: 1px solid rgba(255,255,255,.15); border-radius: 10px; font-size: .95rem; font-family: inherit; background: rgba(255,255,255,.08); color: #fff; transition: border-color .2s; }
+        textarea { resize: vertical; min-height: 100px; }
+        textarea:focus, input:focus, select:focus { outline: none; border-color: #00d4ff; }
+        select option { background: #1a1a2e; color: #fff; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
+        .form-group { margin-bottom: 15px; }
+        .platform-select { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px; }
+        .platform-chip { padding: 10px 20px; border: 1px solid rgba(255,255,255,.15); border-radius: 30px; cursor: pointer; font-weight: 600; font-size: .9rem; transition: all .2s; color: #aaa; background: transparent; }
+        .platform-chip.active { border-color: #00d4ff; background: rgba(0,212,255,.1); color: #00d4ff; }
+        .platform-chip:hover { border-color: #00d4ff; }
+        .tone-select { display: flex; gap: 8px; flex-wrap: wrap; }
+        .tone-chip { padding: 8px 16px; border: 1px solid rgba(255,255,255,.15); border-radius: 20px; cursor: pointer; font-size: .85rem; color: #aaa; transition: all .2s; }
+        .tone-chip.active { border-color: #7b2ff7; background: rgba(123,47,247,.15); color: #c4a0ff; }
+        .btn { background: linear-gradient(90deg, #00d4ff, #7b2ff7); color: #fff; border: none; padding: 14px 30px; border-radius: 30px; font-size: 1rem; font-weight: 700; cursor: pointer; width: 100%; transition: transform .2s, box-shadow .2s; }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 25px rgba(0,212,255,.3); }
+        .btn:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+        .loading { display: none; text-align: center; padding: 30px; }
+        .loading.show { display: block; }
+        .spinner { width: 40px; height: 40px; border: 3px solid rgba(255,255,255,.1); border-top-color: #00d4ff; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 12px; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .results { display: none; }
+        .results.show { display: block; }
+        .ad-card { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1); border-radius: 12px; padding: 20px; margin-bottom: 15px; position: relative; }
+        .ad-card .ad-num { position: absolute; top: 15px; right: 15px; background: linear-gradient(90deg, #00d4ff, #7b2ff7); padding: 3px 12px; border-radius: 15px; font-size: .75rem; font-weight: 700; }
+        .ad-card h4 { color: #00d4ff; font-size: .85rem; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 1px; }
+        .ad-headline { font-size: 1.15rem; font-weight: 700; color: #fff; margin-bottom: 8px; }
+        .ad-body { color: #bbb; font-size: .95rem; line-height: 1.5; margin-bottom: 10px; }
+        .ad-cta-text { display: inline-block; background: rgba(0,212,255,.15); color: #00d4ff; padding: 6px 16px; border-radius: 20px; font-size: .85rem; font-weight: 600; }
+        .ad-platform-tag { display: inline-block; background: rgba(123,47,247,.15); color: #c4a0ff; padding: 3px 10px; border-radius: 12px; font-size: .75rem; margin-bottom: 10px; }
+        .copy-btn { background: rgba(255,255,255,.1); color: #fff; border: none; padding: 6px 14px; border-radius: 20px; font-size: .8rem; cursor: pointer; font-weight: 600; margin-top: 10px; }
+        .copy-btn:hover { background: rgba(255,255,255,.2); }
+        .ab-section { margin-top: 20px; padding: 20px; background: rgba(123,47,247,.08); border: 1px solid rgba(123,47,247,.2); border-radius: 12px; }
+        .ab-section h3 { color: #c4a0ff; margin-bottom: 10px; font-size: 1rem; }
+        .ab-section p { color: #bbb; font-size: .9rem; line-height: 1.5; }
+
+        @media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1>Ad<span>Blitz</span> AI</h1>
+    <div style="font-size:.85rem;color:#888;">AI Ad Copy Generator</div>
+</div>
+
+<div class="main">
+    <div class="card">
+        <h2>Create Your Ad Copy</h2>
+        <div class="form-group">
+            <label>Ad Platform</label>
+            <div class="platform-select">
+                <div class="platform-chip active" data-platform="facebook" onclick="togglePlatform(this)">Facebook</div>
+                <div class="platform-chip" data-platform="google" onclick="togglePlatform(this)">Google Ads</div>
+                <div class="platform-chip" data-platform="instagram" onclick="togglePlatform(this)">Instagram</div>
+                <div class="platform-chip" data-platform="tiktok" onclick="togglePlatform(this)">TikTok</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Product / Service Name</label>
+            <input type="text" id="productName" placeholder="e.g. FitTrack Pro Smartwatch">
+        </div>
+        <div class="form-group">
+            <label>Product Description & Key Features</label>
+            <textarea id="productDesc" placeholder="Describe your product, its key features, benefits, and what makes it unique..."></textarea>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Target Audience</label>
+                <input type="text" id="audience" placeholder="e.g. Fitness enthusiasts, 25-45, health-conscious">
+            </div>
+            <div class="form-group">
+                <label>Campaign Goal</label>
+                <select id="goal">
+                    <option value="conversions">Drive Sales / Conversions</option>
+                    <option value="awareness">Brand Awareness</option>
+                    <option value="leads">Lead Generation</option>
+                    <option value="traffic">Website Traffic</option>
+                    <option value="app_installs">App Installs</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Tone</label>
+            <div class="tone-select">
+                <div class="tone-chip active" data-tone="professional" onclick="selectTone(this)">Professional</div>
+                <div class="tone-chip" data-tone="casual" onclick="selectTone(this)">Casual</div>
+                <div class="tone-chip" data-tone="urgent" onclick="selectTone(this)">Urgent / FOMO</div>
+                <div class="tone-chip" data-tone="humorous" onclick="selectTone(this)">Humorous</div>
+                <div class="tone-chip" data-tone="inspirational" onclick="selectTone(this)">Inspirational</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Special Offer / Promo (optional)</label>
+            <input type="text" id="offer" placeholder="e.g. 30% off first order, Free shipping, Limited time">
+        </div>
+        <button class="btn" id="generateBtn" onclick="generate()">Generate 5 Ad Variations</button>
+    </div>
+
+    <div class="loading" id="loading">
+        <div class="spinner"></div>
+        <p style="color:#888;">AI is crafting high-converting ad copy...</p>
+    </div>
+
+    <div class="results" id="results">
+        <div class="card">
+            <h2>Your Ad Variations</h2>
+            <div id="adsContainer"></div>
+            <div class="ab-section" id="abSection"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+let selectedPlatforms = ['facebook'];
+let selectedTone = 'professional';
+
+function togglePlatform(el) {
+    const p = el.dataset.platform;
+    if (el.classList.contains('active')) {
+        if (selectedPlatforms.length > 1) {
+            selectedPlatforms = selectedPlatforms.filter(x => x !== p);
+            el.classList.remove('active');
+        }
+    } else {
+        selectedPlatforms.push(p);
+        el.classList.add('active');
+    }
+}
+
+function selectTone(el) {
+    document.querySelectorAll('.tone-chip').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+    selectedTone = el.dataset.tone;
+}
+
+function copyAd(idx) {
+    const card = document.querySelectorAll('.ad-card')[idx];
+    const text = card.querySelector('.ad-headline').textContent + '\n\n' +
+                 card.querySelector('.ad-body').textContent + '\n\n' +
+                 'CTA: ' + card.querySelector('.ad-cta-text').textContent;
+    navigator.clipboard.writeText(text);
+    const btn = card.querySelector('.copy-btn');
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = 'Copy Ad', 2000);
+}
+
+async function generate() {
+    const name = document.getElementById('productName').value.trim();
+    const desc = document.getElementById('productDesc').value.trim();
+    if (!name || !desc) { alert('Please enter product name and description.'); return; }
+
+    const btn = document.getElementById('generateBtn');
+    btn.disabled = true;
+    document.getElementById('loading').classList.add('show');
+    document.getElementById('results').classList.remove('show');
+
+    const payload = {
+        platforms: selectedPlatforms,
+        productName: name,
+        productDesc: desc,
+        audience: document.getElementById('audience').value,
+        goal: document.getElementById('goal').value,
+        tone: selectedTone,
+        offer: document.getElementById('offer').value
+    };
+
+    try {
+        const res = await fetch('/api/generate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        displayResults(data);
+    } catch (err) {
+        alert('Something went wrong. Please try again.');
+        console.error(err);
+    } finally {
+        btn.disabled = false;
+        document.getElementById('loading').classList.remove('show');
+    }
+}
+
+function displayResults(data) {
+    const container = document.getElementById('adsContainer');
+    container.innerHTML = '';
+
+    (data.ads || []).forEach((ad, i) => {
+        container.innerHTML += `
+            <div class="ad-card">
+                <div class="ad-num">Ad ${i + 1}</div>
+                <div class="ad-platform-tag">${ad.platform || selectedPlatforms[0]}</div>
+                <h4>Headline</h4>
+                <div class="ad-headline">${ad.headline}</div>
+                <h4>Ad Copy</h4>
+                <div class="ad-body">${ad.body}</div>
+                <h4>Call to Action</h4>
+                <div class="ad-cta-text">${ad.cta}</div>
+                <br><button class="copy-btn" onclick="copyAd(${i})">Copy Ad</button>
+            </div>`;
+    });
+
+    const abSection = document.getElementById('abSection');
+    abSection.innerHTML = `<h3>A/B Testing Recommendations</h3><p>${data.abTestSuggestions || ''}</p>`;
+
+    document.getElementById('results').classList.add('show');
+    document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+}
+</script>
+
+</body>
+</html>
